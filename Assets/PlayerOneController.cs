@@ -13,6 +13,7 @@ public class PlayerOneController : MonoBehaviour
 
     private float moveDirection;
     private bool canJump = false;
+    public bool grounded = false;
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +51,26 @@ public class PlayerOneController : MonoBehaviour
     }
     void OnCollisionEnter2D(Collision2D col)
     {
+        if (col.gameObject.CompareTag("Floor"))
+        {
+            grounded = true;
+        }
+        if (col.gameObject.CompareTag("Player") && col.gameObject.GetComponent<PlayerTwoController>().grounded)
+        { 
+            canJump = true;
+        }
+        
+        if (grounded)
+        {
+            canJump = true;
+        }
+    }
 
-        if (col.gameObject.CompareTag("Floor")) canJump = true;
+    private void OnCollisionExit2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Floor"))
+        {
+            grounded = false;
+        }
     }
 }
