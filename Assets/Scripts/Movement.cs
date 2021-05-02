@@ -39,18 +39,7 @@ public class Movement : MonoBehaviour
     {
         // rb.AddRelativeForce(new Vector2(moveDirection * speed, rb.velocity.y));
 
-        if (_input.x > 0 && _canJump)
-        {
-            _moveDirection = 1;
-        }
-        else if (_input.x < 0 && _canJump)
-        {
-            _moveDirection = -1;
-        }
-        else
-        {
-            _moveDirection = 0;
-        }
+        if(_canJump) _moveDirection = _input.normalized.x;
 
         if (_input.y > 0 && _canJump)
         {
