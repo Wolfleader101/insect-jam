@@ -19,7 +19,6 @@ public class Movement : MonoBehaviour
     
     
     private Rigidbody2D _rb;
-    private float _moveDirection;
     private Vector2 _input;
     private bool _canJump = false;
     
@@ -33,21 +32,19 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+        transform.position += new Vector3(_input.x, 0, _input.y) * (speed * Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
-        // rb.AddRelativeForce(new Vector2(moveDirection * speed, rb.velocity.y));
-
-        if(_canJump) _moveDirection = _input.normalized.x;
-
         if (_input.y > 0 && _canJump)
         {
             _rb.velocity = new Vector2(_rb.velocity.x, jumpHeight);
             _canJump = false;
         }
         
-        _rb.velocity = new Vector2(_moveDirection * speed, _rb.velocity.y);
+        _rb.velocity = new Vector2(0, _rb.velocity.y);
     }
     void OnCollisionEnter2D(Collision2D col)
     {

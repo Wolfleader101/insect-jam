@@ -158,8 +158,8 @@ Camera:
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215688, g: 0.4745098, b: 0.23072831, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -217,6 +217,7 @@ GameObject:
   - component: {fileID: 1032540492}
   - component: {fileID: 1032540491}
   - component: {fileID: 1032540493}
+  - component: {fileID: 1032540494}
   m_Layer: 8
   m_Name: Square
   m_TagString: Untagged
@@ -315,6 +316,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1032540494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032540490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f95d5c86d4e703a41834db5c739170ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverRate: 10
+  hoverRange: 1
+  upperHeight: 2
+  lowerHeight: 1.2
 --- !u!1 &1693458017
 GameObject:
   m_ObjectHideFlags: 0
