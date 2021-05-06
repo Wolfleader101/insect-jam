@@ -16,15 +16,10 @@ public class Hovering : MonoBehaviour
     [SerializeField] float lowerHeight = 1.2f;
     public float LowerHeight => lowerHeight;
 
-    private Vector2 _input;
-    private float _speed;
-    
-
 
     // Start is called before the first frame update
     void Start()
     {
-        _speed = GetComponent<Movement>().Speed;
     }
 
     // Update is called once per frame
@@ -34,10 +29,5 @@ public class Hovering : MonoBehaviour
         transform.localPosition = new Vector3 (transform.localPosition.x, 
                                         Mathf.Lerp(lowerHeight, +upperHeight, (Mathf.Sin(Time.time * hoverRate) + 1) / 2f), 
                                           transform.position.z);
-    }
-
-    public void Move(InputAction.CallbackContext ctx)
-    {
-        _input = ctx.ReadValue<Vector2>();
     }
 }
