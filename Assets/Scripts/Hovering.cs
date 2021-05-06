@@ -8,9 +8,7 @@ public class Hovering : MonoBehaviour
 {
     [SerializeField] private float hoverRate = 10f;
     public float HoverRate => hoverRate;
-
-    [SerializeField] [Range(0, 1)] private float hoverRange = 0.25f;
-    public float HoverRange => hoverRange;
+    
 
     [SerializeField] private float upperHeight = 2f;
     public float UpperHeight => upperHeight;
@@ -20,6 +18,8 @@ public class Hovering : MonoBehaviour
 
     private Vector2 _input;
     private float _speed;
+    
+
 
     // Start is called before the first frame update
     void Start()
@@ -28,52 +28,12 @@ public class Hovering : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        // TODO
-        /*
-         * Make lower height decrease when going down
-         * Make Upper height decrease when going down
-         * make lower height increase when going up
-         *
-         * Fix overall hovering system
-         * 
-         */
-        if (_input.y < 0)
-        {
-            upperHeight += _input.y * (_speed * Time.deltaTime);
-        }
-        // EVENTUALLY USE THIS TO CHANGE LOWER HEIGHT
-        //lowerHeight += _input.y * (_speed * Time.deltaTime);
-        transform.position = ClampHeight((Vector3.up * Mathf.Cos(Time.time * hoverRate) * ClampRange(hoverRange)) + transform.position);
-    }
-    
-    
-    private float ClampRange(float value)
-    {
-        if (transform.position.y > upperHeight)
-            upperHeight = transform.position.y;
-        if (transform.position.y < lowerHeight)
-            lowerHeight = transform.position.y - lowerHeight;
-        if (upperHeight < lowerHeight)
-            upperHeight = lowerHeight + 0.1f;
-        if (lowerHeight > upperHeight)
-            lowerHeight = upperHeight + 0.1f;
-       
-        value = ((upperHeight + lowerHeight) / 2) - 0.25f;
-        value *= hoverRange;
-        value *= 0.01f;
- 
-        return value;
-    }
 
-    private Vector3 ClampHeight(Vector3 value)
-    {
-        if (value.y < lowerHeight)
-            value.y = lowerHeight;
-        if (value.y > upperHeight)
-            value.y = upperHeight;
-        return value;
+        transform.localPosition = new Vector3 (transform.localPosition.x, 
+                                        Mathf.Lerp(lowerHeight, +upperHeight, (Mathf.Sin(Time.time * hoverRate) + 1) / 2f), 
+                                          transform.position.z);
     }
 
     public void Move(InputAction.CallbackContext ctx)
