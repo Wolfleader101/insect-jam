@@ -28,29 +28,25 @@ public class Movement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (flyingType) return;
         _canJump = true;
         _rb = GetComponent<Rigidbody2D>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(flyingType) transform.position += new Vector3(_input.x, _input.y, 0) * (speed * Time.deltaTime);
-        if(!flyingType) transform.position += new Vector3(_input.x, 0, 0) * (speed * Time.deltaTime);
-    }
-
+    
     private void FixedUpdate()
     {
-        if (flyingType) return;
-        
+        if (flyingType)
+        {
+            _rb.velocity = new Vector2(_input.x * speed, _input.y * speed);
+            return;
+        }
+
         if (_input.y > 0 && _canJump)
         {
             _rb.velocity = new Vector2(_rb.velocity.x, jumpHeight);
             _canJump = false;
         }
 
-        _rb.velocity = new Vector2(0, _rb.velocity.y);
+        _rb.velocity = new Vector2(_input.x * speed, _rb.velocity.y);
     }
 
     void OnCollisionEnter2D(Collision2D col)
