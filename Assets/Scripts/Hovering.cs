@@ -26,8 +26,9 @@ public class Hovering : MonoBehaviour
     void LateUpdate()
     {
 
-        transform.localPosition = new Vector3 (transform.localPosition.x, 
-                                        Mathf.Lerp(lowerHeight, +upperHeight, (Mathf.Sin(Time.time * hoverRate) + 1) / 2f), 
-                                          transform.position.z);
+        transform.localPosition = new Vector3 (
+            transform.localPosition.x, 
+            Mathf.Lerp(lowerHeight, +upperHeight, (Mathf.Sin(Time.time * hoverRate) + 1) / 2f), 
+            transform.position.z);
     }
 }

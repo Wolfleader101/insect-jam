@@ -5,7 +5,10 @@ using UnityEngine.InputSystem;
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField] private float speed = 10f;
+    [SerializeField] private InputActionAsset playerInput = null;
+    public InputActionAsset PlayerInput => playerInput;
+
+    private float speed = 10f;
     public float Speed => speed;
 
     [SerializeField] private bool flyingType = false;
@@ -22,6 +25,7 @@ public class Movement : MonoBehaviour
 
 
     private Rigidbody2D _rb;
+    private PlayerInput _playerInput;
     private Vector2 _input;
     private bool _canJump = false;
 
@@ -30,6 +34,8 @@ public class Movement : MonoBehaviour
     {
         _canJump = true;
         _rb = GetComponent<Rigidbody2D>();
+        _playerInput = GetComponent<PlayerInput>();
+        _playerInput.actions = playerInput;
     }
     
     private void FixedUpdate()

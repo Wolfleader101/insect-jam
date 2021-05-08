@@ -178,6 +178,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bee
       objectReference: {fileID: 0}
+    - target: {fileID: 5173965200633071455, guid: ba92848819112b44ba763bc3ae3d7854, type: 3}
+      propertyPath: playerInput
+      value: 
+      objectReference: {fileID: -944628639613478452, guid: ac531fdd7f47d4644a33c4971a8de4b3, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba92848819112b44ba763bc3ae3d7854, type: 3}
 --- !u!1 &519420028
