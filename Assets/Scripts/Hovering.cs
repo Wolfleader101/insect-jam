@@ -15,8 +15,7 @@ public class Hovering : MonoBehaviour
 
     [SerializeField] float lowerHeight = 1.2f;
     public float LowerHeight => lowerHeight;
-
-
+    
     // Start is called before the first frame update
     void Start()
     {

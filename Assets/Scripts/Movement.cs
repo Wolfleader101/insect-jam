@@ -1,12 +1,21 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum PlayerDirection
+{
+    Left = -1,
+    Right = 1
+}
 public class Movement : MonoBehaviour
 {
     [SerializeField] private InputActionAsset playerInput = null;
     public InputActionAsset PlayerInput => playerInput;
+
+    [SerializeField] private PlayerDirection facingDirection = PlayerDirection.Right;
+    public PlayerDirection FacingDirection => facingDirection;
 
     private float speed = 10f;
     public float Speed => speed;
@@ -23,6 +32,8 @@ public class Movement : MonoBehaviour
     [SerializeField] private bool grounded = false;
     public bool Grounded => grounded;
 
+    public bool wallClimbing = false;
+
 
     private Rigidbody2D _rb;
     private PlayerInput _playerInput;
@@ -37,7 +48,13 @@ public class Movement : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.actions = playerInput;
     }
-    
+
+    private void Update()
+    {
+        if (_input.x < 0) facingDirection = PlayerDirection.Left;
+        if (_input.x > 0) facingDirection = PlayerDirection.Right;
+    }
+
     private void FixedUpdate()
     {
         if (flyingType)
@@ -46,13 +63,22 @@ public class Movement : MonoBehaviour
             return;
         }
 
-        if (_input.y > 0 && _canJump)
+        if (_input.y > 0 && wallClimbing)
         {
-            _rb.velocity = new Vector2(_rb.velocity.x, jumpHeight);
-            _canJump = false;
+            _rb.velocity = new Vector2(0, _input.y * speed);
+            return;
         }
 
+        if (_input.y > 0 && _canJump)
+        {
+            _rb.velocity = new Vector2(0, jumpHeight);
+            _canJump = false;
+            return;
+        }
+        // Experimenting with not being able to air strafe - not sure if i like it
+        //if (grounded || wallClimbing || _canJump) 
         _rb.velocity = new Vector2(_input.x * speed, _rb.velocity.y);
+
     }
 
     void OnCollisionEnter2D(Collision2D col)
