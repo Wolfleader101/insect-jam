@@ -34,25 +34,30 @@ public class WallClimbing : MonoBehaviour
     void FixedUpdate()
     {
         rayStartDist.x = (float) _movement.FacingDirection * rayXOffset;
-        Vector3 rayStart = (rayStartDist + (Vector2)transform.position);
+        Vector2 upperRayStartDist = new Vector2(rayStartDist.x, Mathf.Abs(rayStartDist.y));
+        Vector3 lowerRayStart = (rayStartDist + (Vector2)transform.position);
+        Vector3 upperRayStart = (upperRayStartDist + (Vector2)transform.position);
 
         Vector3 RayDir = new Vector3((float)_movement.FacingDirection, 0 ,0).normalized;
 
-        RaycastHit2D hit = Physics2D.Raycast(rayStart, RayDir, rayDistance, 1 << LayerMask.NameToLayer("Wall Climb"));
+        RaycastHit2D lowerHit = Physics2D.Raycast(lowerRayStart, RayDir, rayDistance, 1 << LayerMask.NameToLayer("Wall Climb"));
+        RaycastHit2D upperHit = Physics2D.Raycast(upperRayStart, RayDir, rayDistance, 1 << LayerMask.NameToLayer("Wall Climb"));
         
         // Does the ray intersect any objects excluding the player layer
-        if (hit.collider != null && hit.collider.gameObject != gameObject)
+        if ((lowerHit.collider != null && lowerHit.collider.gameObject != gameObject) || (upperHit.collider != null && upperHit.collider.gameObject != gameObject))
         {
             _rb.gravityScale = 0f;
             _movement.wallClimbing = true;
             
-            Debug.DrawRay(rayStart, RayDir * rayDistance, Color.green);
+            Debug.DrawRay(lowerRayStart, RayDir * rayDistance, Color.green);
+            Debug.DrawRay(upperRayStart, RayDir * rayDistance, Color.green);
         }
         else
         {
             _rb.gravityScale = _prevGravScale;
             _movement.wallClimbing = false;
-            Debug.DrawRay(rayStart, RayDir * rayDistance, Color.white);
+            Debug.DrawRay(lowerRayStart, RayDir * rayDistance, Color.white);
+            Debug.DrawRay(upperRayStart, RayDir * rayDistance, Color.white);
         }
     }
 }
