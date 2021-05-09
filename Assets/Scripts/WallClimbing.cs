@@ -14,12 +14,14 @@ public class WallClimbing : MonoBehaviour
 
     private Movement _movement;
     private Rigidbody2D _rb;
+    private float _prevGravScale;
 
     // Start is called before the first frame update
     void Start()
     {
         _movement = GetComponent<Movement>();
         _rb = GetComponent<Rigidbody2D>();
+        _prevGravScale = _rb.gravityScale;
 
     }
 
@@ -36,7 +38,7 @@ public class WallClimbing : MonoBehaviour
 
         Vector3 RayDir = new Vector3((float)_movement.FacingDirection, 0 ,0).normalized;
 
-        RaycastHit2D hit = Physics2D.Raycast(rayStart, RayDir, rayDistance);
+        RaycastHit2D hit = Physics2D.Raycast(rayStart, RayDir, rayDistance, 1 << LayerMask.NameToLayer("Wall Climb"));
         
         // Does the ray intersect any objects excluding the player layer
         if (hit.collider != null && hit.collider.gameObject != gameObject)
@@ -48,7 +50,7 @@ public class WallClimbing : MonoBehaviour
         }
         else
         {
-            _rb.gravityScale = 1f;
+            _rb.gravityScale = _prevGravScale;
             _movement.wallClimbing = false;
             Debug.DrawRay(rayStart, RayDir * rayDistance, Color.white);
         }

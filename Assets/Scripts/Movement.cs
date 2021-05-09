@@ -32,6 +32,12 @@ public class Movement : MonoBehaviour
     [SerializeField] private bool grounded = false;
     public bool Grounded => grounded;
 
+    [SerializeField] private Vector2 rayStartPos = new Vector2(0f, -0.51f);
+    public Vector2 RayStartPos => rayStartPos;
+    
+    [SerializeField] private float rayDistance = 0.01f;
+    public float RayDistance => rayDistance;
+
     public bool wallClimbing = false;
 
 
@@ -57,15 +63,17 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        _canJump = CheckCanJump();
+        
         if (flyingType)
         {
             _rb.velocity = new Vector2(_input.x * speed, _input.y * speed);
             return;
         }
 
-        if (_input.y > 0 && wallClimbing)
+        if (wallClimbing)
         {
-            _rb.velocity = new Vector2(0, _input.y * speed);
+            _rb.velocity = new Vector2(0, _input.y * (speed * 0.75f)); // *0.75f to slightly decrease wall climbing speed
             return;
         }
 
@@ -77,35 +85,56 @@ public class Movement : MonoBehaviour
         }
         // Experimenting with not being able to air strafe - not sure if i like it
         //if (grounded || wallClimbing || _canJump) 
+        
+        // Allow for air strafing - can make some fun game mechanics
         _rb.velocity = new Vector2(_input.x * speed, _rb.velocity.y);
 
     }
 
-    void OnCollisionEnter2D(Collision2D col)
+    bool CheckCanJump()
     {
-        if (col.gameObject.CompareTag("Floor"))
-        {
-            grounded = true;
-        }
+        Vector3 rayStart = (rayStartPos + (Vector2)transform.position);
 
-        if (col.gameObject.CompareTag("Player") && col.gameObject.GetComponent<Movement>().grounded)
-        {
-            _canJump = true;
-        }
+        Vector3 RayDir = Vector2.down;
 
-        if (grounded)
+        RaycastHit2D hit = Physics2D.Raycast(rayStart, RayDir, rayDistance);
+        
+        // Does the ray intersect any objects excluding the player layer
+        if (hit.collider != null && hit.collider.gameObject != gameObject)
         {
-            _canJump = true;
+            Debug.DrawRay(rayStart, RayDir * rayDistance, Color.green);
+            return true;
         }
+        
+        Debug.DrawRay(rayStart, RayDir * rayDistance, Color.white);
+        return false;
     }
-
-    private void OnCollisionExit2D(Collision2D col)
-    {
-        if (col.gameObject.CompareTag("Floor"))
-        {
-            grounded = false;
-        }
-    }
+    
+    // void OnCollisionEnter2D(Collision2D col)
+    // {
+    //     if (col.gameObject.CompareTag("Floor"))
+    //     {
+    //         grounded = true;
+    //     }
+    //
+    //     if (col.gameObject.CompareTag("Player") && col.gameObject.GetComponent<Movement>().grounded)
+    //     {
+    //         _canJump = true;
+    //     }
+    //
+    //     if (grounded)
+    //     {
+    //         _canJump = true;
+    //     }
+    // }
+    //
+    // private void OnCollisionExit2D(Collision2D col)
+    // {
+    //     if (col.gameObject.CompareTag("Floor"))
+    //     {
+    //         grounded = false;
+    //     }
+    // }
 
     public void Move(InputAction.CallbackContext ctx)
     {
